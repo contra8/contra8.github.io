@@ -808,7 +808,7 @@ var ProductEditComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h2>Das Gotthelf-Universum</h2>\n\n<!--div>\n  <button (click)=\"getProducts()\">\n    Hole 1. Absatz aus \"Geld und Geist - Die Versöhnung\"\n  </button>\n</div-->\n\n<!--script>\n     myObj = [{ \"name\":\"John\", \"age\":30, \"car\":null }];\n</script-->\n\n<!--div id=\"output\">\n  {{myObj.age}}\n  {{products[0]['body'][0]['type'][0]['p'][0]['#text']}}>\n</div-->\n\n<!--form style=\"margin-left: 20px;\">\n  <div class=\"form-group\">\n    <label for=\"name\">Nummer des gewünschten Absatzes eingeben:</label>\n    <input type=\"text\" class=\"form-control\" id=\"index\" [(ngModel)]=\"this.index\" required style=\"width:100px;\"-->\n  <!--input type=\"text\" [formControl]=\"index\" style=\"width:100px;\"-->\n  <!--/div>\n</form-->\n\n  <button type=\"submit\" class=\"btn btn-success\" style=\"color:black;\" (click)=\"getProducts()\">Einen Absatz aus \"C5G Geld\" holen</button>\n\n\n<!--p>Index: {{index.value}}</p-->\n<ul class=\"products\" style=\"width:450px; margin-left:40px;\">\n  <!--li *ngFor=\"let p of products;\"-->\n  <li>\n    <!--{{p.p.type}}-->\n    {{products.body.p[2].text}}\n  </li>\n  <!--li *ngFor=\"let element of array\">{{element.age}}</li-->\n  <!--li *ngFor=\"let pe of products.body.p\" | async>\n    {{pe.text}}\n  </li-->\n</ul>\n\n<!--ul class=\"products\">\n  <li *ngFor=\"let p of products; let i=index;\">\n    <a routerLink=\"/product-details/{{p._id}}\">\n      <span class=\"badge\">{{i+1}}</span> {{p}}\n    </a>\n    <button class=\"delete\" title=\"delete product\"\n      (click)=\"delete(p._id)\">x</button>\n  </li>\n</ul-->"
+module.exports = "<div  style=\"margin: 20px; max-width: 1024px;\">\n  <h2>Das Gotthelf-Universum</h2>\n\n<!--div>\n  <button (click)=\"getProducts()\">\n    Hole 1. Absatz aus \"Geld und Geist - Die Versöhnung\"\n  </button>\n</div-->\n\n<!--script>\n     myObj = [{ \"name\":\"John\", \"age\":30, \"car\":null }];\n</script-->\n\n<!--div id=\"output\">\n  {{myObj.age}}\n  {{products[0]['body'][0]['type'][0]['p'][0]['#text']}}>\n</div-->\n\n<!--form style=\"margin-left: 20px;\">\n  <div class=\"form-group\">\n    <label for=\"name\">Nummer des gewünschten Absatzes eingeben:</label>\n    <input type=\"text\" class=\"form-control\" id=\"index\" [(ngModel)]=\"this.index\" required style=\"width:100px;\"-->\n  <!--input type=\"text\" [formControl]=\"index\" style=\"width:100px;\"-->\n  <!--/div>\n</form-->\n\n  <form>\n    <label for=\"name\">Bitte Nummer des gewünschten Absatzes eingeben (Zahl zwischen 1 und 20):&nbsp;</label>\n    <input type=\"text\" [(ngModel)]=\"name\" style=\"float: right;\" />\n  </form>\n\n  <!--div style=\"margin-right: 0px;\"-->\n    <button type=\"submit\" class=\"btn btn-success\" style=\"color:black; float: right; margin-top: 50px; margin-bottom: 50px;\" (click)=\"getProducts(1)\">Absatz aus eXist-db holen und anzeigen</button>\n  <!--/div-->\n  <!--p>Index: {{index.value}}</p-->\n  <p>Der gewünschte Absatz:</p>\n  <ul class=\"products\" style=\"width:450px;\">\n    <!--li *ngFor=\"let p of products;\"-->\n    <li>\n      <!--{{p.p.type}}-->\n      {{products.body.p.text}}\n    </li>\n    <!--li *ngFor=\"let element of array\">{{element.age}}</li-->\n    <!--li *ngFor=\"let pe of products.body.p\" | async>\n      {{pe.text}}\n    </li-->\n  </ul>\n\n  <!--ul class=\"products\">\n    <li *ngFor=\"let p of products; let i=index;\">\n      <a routerLink=\"/product-details/{{p._id}}\">\n        <span class=\"badge\">{{i+1}}</span> {{p}}\n      </a>\n      <button class=\"delete\" title=\"delete product\"\n        (click)=\"delete(p._id)\">x</button>\n    </li>\n  </ul-->\n\n</div>  "
 
 /***/ }),
 
@@ -849,36 +849,18 @@ var ProductComponent = /** @class */ (function () {
         this.route = route;
         this.router = router;
         this.index = new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"]('');
-        this.array = [
-            {
-                guid: '900ea552-ef68-42cc-b6a6-b8c4dff10fb7',
-                age: 32,
-                name: 'Powers Schneider',
-            },
-            {
-                guid: '880381d3-8dca-4aed-b207-b3b4e575a15f',
-                age: 25,
-                name: 'Adrian Lawrence',
-            },
-            {
-                guid: '87b47684-c465-4c51-8c88-3f1a1aa2671b',
-                age: 32,
-                name: 'Boyer Stanley',
-            },
-        ];
         //products:any = [];
         this.products = [{ "name": "Albert" }];
     }
     ProductComponent.prototype.ngOnInit = function () {
-        //this.getProducts();
+        this.getProducts(1);
     };
-    ProductComponent.prototype.getProducts = function () {
+    ProductComponent.prototype.getProducts = function (index) {
         var _this = this;
         console.log("product.component.ts.getProducts() meldet");
-        console.log(this.array);
         console.log(this.products);
         this.products = [];
-        this.rest.getProducts().subscribe(function (data) {
+        this.rest.getProducts(index).subscribe(function (data) {
             //console.log("The JSON: " + data);
             _this.products = data;
             console.log("Test");
@@ -894,7 +876,7 @@ var ProductComponent = /** @class */ (function () {
         var _this = this;
         this.rest.deleteProduct(id)
             .subscribe(function (res) {
-            _this.getProducts();
+            _this.getProducts(1);
         }, function (err) {
             console.log(err);
         });
@@ -942,12 +924,13 @@ var RestService = /** @class */ (function () {
         var body = res;
         return body || {};
     };
-    RestService.prototype.getProducts = function () {
+    RestService.prototype.getProducts = function (index) {
         //return this.http.get(endpoint + '/hkgcode/routines/test_json.xql').pipe(
         //return this.http.get(endpoint + '/hkgcode/routines/getAllIdsOfG_Korrespondenz.xqm?coll=/db/data/Handschriften/G_Korrespondenz').pipe(
-        return this.http.get(endpoint + '/hkgcode/getXMLDocumentAsJSON.xql?pindex=10').pipe(
         //return this.http.get(endpoint + '/hkgcode/routines/getAllIdsOfG_Korrespondenz.xqm?coll=/db/data/Handschriften/G_Korrespondenz/Drittbriefe').pipe(
-        Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(this.extractData));
+        console.log("index = " + index);
+        // Call http://hkgb.germ.unibe.ch:8080/exist/rest/db/hkgcode/getXMLDocumentAsJSON.xql?pindex=20
+        return this.http.get(endpoint + '/hkgcode/getXMLDocumentAsJSON.xql?pindex=' + index).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(this.extractData));
     };
     RestService.prototype.getProduct = function (id) {
         return this.http.get(endpoint + 'products/' + id).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(this.extractData));
